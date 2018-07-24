@@ -10,8 +10,8 @@ using vega.Persistence;
 namespace vega.Migrations
 {
     [DbContext(typeof(VegaDbContext))]
-    [Migration("20180723154534_AddVehicle")]
-    partial class AddVehicle
+    [Migration("20180723235101_AddVehicles")]
+    partial class AddVehicles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,28 +20,6 @@ namespace vega.Migrations
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("vega.Models.Contact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ContactEmail")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ContactName")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ContactPhone")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contacts");
-                });
 
             modelBuilder.Entity("vega.Models.Feature", b =>
                 {
@@ -96,7 +74,16 @@ namespace vega.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ContactId");
+                    b.Property<string>("ContactEmail")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.Property<bool>("IsRegistered");
 
@@ -105,8 +92,6 @@ namespace vega.Migrations
                     b.Property<int>("ModelId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
 
                     b.HasIndex("ModelId");
 
@@ -136,11 +121,6 @@ namespace vega.Migrations
 
             modelBuilder.Entity("vega.Models.Vehicle", b =>
                 {
-                    b.HasOne("vega.Models.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("vega.Models.Model", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId")

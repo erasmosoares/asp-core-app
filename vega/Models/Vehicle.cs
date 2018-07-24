@@ -11,14 +11,18 @@ namespace vega.Models
     {
         public int Id { get; set; }
         public int ModelId { get; set; }
-
-        public Model Model {get;set;}
-
+        public Model Model { get; set; }
         public bool IsRegistered { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string ContactName { get; set; }
 
-        public int ContactId {get;set;}
-        public Contact Contact {get;set;}
+        [StringLength(255)]
+        public string ContactEmail { get; set; }
 
+        [Required]
+        [StringLength(255)]
+        public string ContactPhone { get; set; }
         public DateTime LastUpdate { get; set; }
         public ICollection<VehicleFeature> Features { get; set; }
 

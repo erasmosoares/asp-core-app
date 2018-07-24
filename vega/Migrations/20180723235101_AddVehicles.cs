@@ -4,25 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace vega.Migrations
 {
-    public partial class AddVehicle : Migration
+    public partial class AddVehicles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Contacts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ContactName = table.Column<string>(maxLength: 255, nullable: false),
-                    ContactEmail = table.Column<string>(maxLength: 255, nullable: true),
-                    ContactPhone = table.Column<string>(maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contacts", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Vehicles",
                 columns: table => new
@@ -31,18 +16,14 @@ namespace vega.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ModelId = table.Column<int>(nullable: false),
                     IsRegistered = table.Column<bool>(nullable: false),
-                    ContactId = table.Column<int>(nullable: false),
+                    ContactName = table.Column<string>(maxLength: 255, nullable: false),
+                    ContactEmail = table.Column<string>(maxLength: 255, nullable: true),
+                    ContactPhone = table.Column<string>(maxLength: 255, nullable: false),
                     LastUpdate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Vehicles_Contacts_ContactId",
-                        column: x => x.ContactId,
-                        principalTable: "Contacts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Vehicles_Models_ModelId",
                         column: x => x.ModelId,
@@ -81,11 +62,6 @@ namespace vega.Migrations
                 column: "FeatureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehicles_ContactId",
-                table: "Vehicles",
-                column: "ContactId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_ModelId",
                 table: "Vehicles",
                 column: "ModelId");
@@ -98,9 +74,6 @@ namespace vega.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
-
-            migrationBuilder.DropTable(
-                name: "Contacts");
         }
     }
 }
