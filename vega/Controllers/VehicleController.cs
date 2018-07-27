@@ -35,7 +35,7 @@ namespace vega.Controllers
 
         var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
-        return Ok(result);
+        return Ok(result);  
     }
 
     [HttpPut("{id}")] 
@@ -85,5 +85,7 @@ namespace vega.Controllers
 
         return Ok(vehicleResource);
      }
+
   }
+  
 }
