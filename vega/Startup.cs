@@ -10,6 +10,7 @@ using vega.Persistence;
 using AutoMapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using vega.Core;
 
 namespace vega
 {
