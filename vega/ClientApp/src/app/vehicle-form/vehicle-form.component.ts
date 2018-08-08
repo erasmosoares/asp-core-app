@@ -1,6 +1,7 @@
 import { ToastrService } from 'ngx-toastr';
 import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -16,10 +17,31 @@ export class VehicleFormComponent implements OnInit {
     contact: {}
   };
 
-  constructor(private vehicleService: VehicleService, 
-              private toastr: ToastrService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private vehicleService: VehicleService, 
+    private toastr: ToastrService){
+
+    route.params.subscribe(p => {
+      if(p['id'])this.vehicle.id = +p['id'];
+    });
+
+  }
 
   ngOnInit() {
+
+    if(this.vehicle.id > 0)
+    {
+      this.vehicleService.getVehicle(this.vehicle.id)
+      .subscribe(v => {
+        this.vehicle = v;
+      }, err => {
+         if(err.status == 404)
+          this.showFailure(); // not found page
+      });
+    }
+
     this.vehicleService.getMakes().subscribe(makes => 
       this.makes = makes);
 
