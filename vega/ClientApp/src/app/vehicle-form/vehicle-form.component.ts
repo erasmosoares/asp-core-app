@@ -1,7 +1,10 @@
+import { Vehicle } from './../models/vehicle';
+import { SaveVehicle } from './../models/SaveVehicle';
 import { ToastrService } from 'ngx-toastr';
 import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '../../../node_modules/@angular/router';
+import { Observable } from '../../../node_modules/rxjs';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -12,9 +15,17 @@ export class VehicleFormComponent implements OnInit {
   makes: any[]; 
   models: any[];
   features: any[];
-  vehicle: any = {
+  vehicle: SaveVehicle = {
+    id: 0,
+    makeId: 0,
+    modelId: 0,
+    isRegistered: false,
     features: [],
-    contact: {}
+    contact: {
+      name: '',
+      email: '',
+      phone: '',
+    }
   };
 
   constructor(
@@ -31,28 +42,45 @@ export class VehicleFormComponent implements OnInit {
 
   ngOnInit() {
 
-    if(this.vehicle.id > 0)
-    {
-      this.vehicleService.getVehicle(this.vehicle.id)
-      .subscribe(v => {
-        this.vehicle = v;
-      }, err => {
-         if(err.status == 404)
-          this.showFailure(); // not found page
-      });
-    }
+    var sources = [
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures(),
+    ];
 
-    this.vehicleService.getMakes().subscribe(makes => 
-      this.makes = makes);
+    if(this.vehicle.id)
+    sources.push(this.vehicleService.getVehicle(this.vehicle.id));
 
-    this.vehicleService.getFeatures().subscribe(features => 
-      this.features = features);
+    Observable.forkJoin(sources).subscribe( data => {
+      this.makes = data[0];
+      this.features = data[1];
+
+      if(this.vehicle.id){
+        this.setVehicle(data[2]);
+        this.populateModels();
+      }
+    }, err => {
+      if(err.status == 404)
+       this.showFailure(); // not found page
+   });
   }
 
+  private setVehicle(v: Vehicle){
+    this.vehicle.id = v.id;
+    this.vehicle.makeId = v.make.id;
+    this.vehicle.modelId = v.model.id;
+    this.vehicle.isRegistered = v.isRegistered;
+    this.vehicle.contact = v.contact;
+    this.vehicle.features = v.features.map(f => f.id);// _.pluck(v.features, 'id');
+   }
+
   onMakeChange() {
+    this.populateModels();
+    delete this.vehicle.modelId;
+  }
+
+  private populateModels() {
     var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models : [];
-    delete this.vehicle.modelId;
   }
 
   onFeatureToggle(featureId, $event){
