@@ -60,7 +60,8 @@ export class VehicleFormComponent implements OnInit {
       }
     }, err => {
       if(err.status == 404)
-       this.showFailure(); // not found page
+      this.router.navigate(['']);
+      this.showInfo("Woops", "Vehicle not found"); // not found page
    });
   }
 
@@ -93,19 +94,45 @@ export class VehicleFormComponent implements OnInit {
   }
 
   submit(){
-    this.vehicleService.create(this.vehicle)
-    .subscribe(x => console.log(x),
-    err=>{
-      this.showFailure();
-    });
+    if(this.vehicle.id){
+      this.vehicleService.update(this.vehicle)
+      .subscribe(x =>{
+        this.showSuccess("Success","The vehicle was sucessfully updated.")
+      });
+    }
+    else{
+      this.vehicleService.create(this.vehicle)
+      .subscribe(x => console.log(x),
+      err=>{
+        this.showFailure("Error","An unexpected error happened");
+      });
+    }
    }
 
-  showSuccess() {
-    this.toastr.success('Hello world!', 'Toastr fun!');
+  delete(){
+     if(confirm("Are you sure?")){
+       this.vehicleService.delete(this.vehicle.id)
+       .subscribe(x =>{
+         this.router.navigate(['']);
+         this.showSuccess("Success","The vehicle was sucessfully deleted.")
+       });
+     }
+   }
+
+  showSuccess(title, message) {
+    this.toastr.success(title, message, {
+      timeOut: 3000,
+    });
   }
 
-  showFailure() {
-    this.toastr.error('An unexpected error happened', 'Error', {
+  showFailure(title, message) {
+    this.toastr.error(title, message, {
+      timeOut: 3000,
+    });
+  }
+
+  showInfo(title, message) {
+    this.toastr.info(title, message, {
       timeOut: 3000,
     });
   }
