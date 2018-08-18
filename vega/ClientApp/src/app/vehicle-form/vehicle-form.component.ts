@@ -35,7 +35,7 @@ export class VehicleFormComponent implements OnInit {
     private toastr: ToastrService){
 
     route.params.subscribe(p => {
-      if(p['id'])this.vehicle.id = +p['id'];
+      if(p['id'])this.vehicle.id = +p['id'] || 0;
     });
 
   }
@@ -92,7 +92,7 @@ export class VehicleFormComponent implements OnInit {
      this.vehicle.features.splice(index,1);
     }    
   }
-
+/*
   submit(){
     if(this.vehicle.id){
       this.vehicleService.update(this.vehicle)
@@ -108,6 +108,14 @@ export class VehicleFormComponent implements OnInit {
       });
     }
    }
+*/
+   submit() {
+    var result$ = (this.vehicle.id) ? this.vehicleService.update(this.vehicle) : this.vehicleService.create(this.vehicle); 
+    result$.subscribe(vehicle => {
+      this.showSuccess("Success","The vehicle was sucessfully updated.");
+      this.router.navigate(['/vehicles/', vehicle.id])
+    });
+  }
 
   delete(){
      if(confirm("Are you sure?")){

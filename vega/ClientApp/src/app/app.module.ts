@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './shared/pagination.component';
+import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,8 @@ import { PaginationComponent } from './shared/pagination.component';
     FetchDataComponent,
     VehicleFormComponent,
     VehicleListComponent,
-    PaginationComponent
+    PaginationComponent,
+    ViewVehicleComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -40,10 +42,12 @@ import { PaginationComponent } from './shared/pagination.component';
     RouterModule.forRoot([
       { path: '', component: VehicleListComponent, pathMatch: 'full' },
       { path: 'vehicles/new', component: VehicleFormComponent },
-      { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+      { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles', component: VehicleListComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: '**', redirectTo: '' }
     ])
   ],
   providers: [
