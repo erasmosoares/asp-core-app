@@ -11,6 +11,7 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using vega.Core;
+using vega.Core.Models;
 
 namespace vega
 {
@@ -26,6 +27,7 @@ namespace vega
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             // transient - a separate instance for every user
             // singleton - a single instance during appliction lifecycle
             // scoped - a single instance for each request

@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using vega.Controllers.Resources;
 using vega.Core;
 using vega.Core.Models;
@@ -14,12 +15,16 @@ namespace vega.Controllers
     [Route("/api/vehicles/{vehicleId}/photos")]
     public class PhotosController : Controller
     {
+
         private readonly IHostingEnvironment host;
         private readonly IVehicleRepository repository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public PhotosController(IHostingEnvironment host, IVehicleRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly PhotoSettings photoSettings;
+
+        public PhotosController(IHostingEnvironment host, IVehicleRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
         {
+            this.photoSettings = options.Value;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
             this.repository = repository;

@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './shared/pagination.component';
 import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
+import { PhotoService } from './services/photo.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +52,8 @@ import { ViewVehicleComponent } from './view-vehicle/view-vehicle.component';
     ])
   ],
   providers: [
-    VehicleService
+    VehicleService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })
