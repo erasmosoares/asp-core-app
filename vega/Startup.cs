@@ -35,6 +35,8 @@ namespace vega
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
+
             services.AddAutoMapper();
 
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
