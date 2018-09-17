@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using vega.Core;
 using vega.Core.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace vega
 {
@@ -48,7 +49,18 @@ namespace vega
                 //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
             });;
-             
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://vega-sample.auth0.com/";
+                options.Audience = "https://api.vega.com";
+            }); 
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
